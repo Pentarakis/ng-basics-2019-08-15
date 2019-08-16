@@ -1,0 +1,29 @@
+<mat-card>
+
+  <mat-card-header>Edit Character</mat-card-header>
+
+  <mat-card-content>
+
+    <form>
+      <mat-form-field>
+        <input type="text" matInput
+               name="name" placeholder="name"
+               [(ngModel)]="character.name">
+      </mat-form-field>
+      <br>
+      <mat-form-field>
+        <input type="text" matInput
+               name="culture" placeholder="culture"
+               [(ngModel)]="character.culture">
+      </mat-form-field>
+
+      <div>
+        <button mat-raised-button color="primary"
+                (click)="save()">Save
+        </button>
+      </div>
+    </form>
+
+  </mat-card-content>
+
+</mat-card>

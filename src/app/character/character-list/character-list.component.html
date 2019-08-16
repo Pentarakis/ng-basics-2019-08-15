@@ -1,0 +1,26 @@
+<ngb-character
+  [character]="chosenCharacter"
+  (characterSaved)="save($event)"
+
+></ngb-character>
+
+<table>
+
+  <thead>
+  <tr>
+    <th>ID</th>
+    <th>Name</th>
+    <th>Culture</th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <tr *ngFor="let character of characters"
+      (click)="chosenCharacter = character">
+    <td>{{character.id}}</td>
+    <td>{{character.name}}</td>
+    <td>{{character.culture}}</td>
+  </tr>
+  </tbody>
+
+</table>
