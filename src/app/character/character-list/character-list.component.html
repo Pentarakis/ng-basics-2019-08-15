@@ -4,7 +4,7 @@
 
 ></ngb-character>
 
-<table>
+<table mat-table [dataSource]="characters" class="mat-elevation-z8">
 
   <thead>
   <tr>
@@ -14,13 +14,22 @@
   </tr>
   </thead>
 
-  <tbody>
-  <tr *ngFor="let character of characters"
-      (click)="chosenCharacter = character">
-    <td>{{character.id}}</td>
-    <td>{{character.name}}</td>
-    <td>{{character.culture}}</td>
-  </tr>
-  </tbody>
+  <ng-container matColumnDef="id">
+    <th mat-header-cell *matHeaderCellDef> ID </th>
+    <td mat-cell *matCellDef="let character"> {{character.id}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef> Name </th>
+    <td mat-cell *matCellDef="let character"> {{character.name}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="culture">
+    <th mat-header-cell *matHeaderCellDef> Culture </th>
+    <td mat-cell *matCellDef="let character"> {{character.culture}} </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let character; columns: displayedColumns;" (click)="chosenCharacter = character"></tr>
 
 </table>
