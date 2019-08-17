@@ -19,7 +19,6 @@ import { CharacterModule } from './character/character.module';
     AppRoutingModule,
     BrowserAnimationsModule,
     BasicLayoutModule,
-    CharacterModule,
     HttpClientModule
   ],
   providers: [],
