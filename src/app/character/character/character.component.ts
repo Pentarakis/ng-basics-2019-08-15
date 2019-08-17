@@ -1,5 +1,8 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { ActivatedRoute, Params, Router } from '@angular/router';
+import { Observable, Subject, Subscription } from 'rxjs';
+import { filter } from 'rxjs/internal/operators/filter';
+import { pluck, switchMap, takeUntil } from 'rxjs/operators';
 import { CharacterService } from '../character.service';
 import { Character } from '../model/character';
 
@@ -8,28 +11,55 @@ import { Character } from '../model/character';
   templateUrl: './character.component.html',
   styleUrls: ['./character.component.scss']
 })
-export class CharacterComponent implements OnInit {
+export class CharacterComponent implements OnInit, OnDestroy {
 
-  character: Character;
+  isCreateMode = true;
+  character: Character = new Character();
 
-  constructor(private route: ActivatedRoute, private characterService: CharacterService) { }
+  private destroy = new Subject<boolean>();
+
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private characterService: CharacterService) {
+  }
 
   ngOnInit() {
-    const id = this.route.snapshot.params.id;
-    this.characterService.read(Number(id)).subscribe(
-      (character: Character) => this.character = character
-    );
+    this.route.params.pipe(
+      pluck('id'),
+      filter(id => id !== 'create'),
+      switchMap((id: number) => this.characterService.read(Number(id))),
+      takeUntil(this.destroy)
+    )
+      .subscribe(
+        (character: Character) => {
+          this.character = character;
+          this.isCreateMode = false;
+        }
+      );
   }
 
   save(): void {
-
-    this.characterService.update(this.character)
-    .subscribe(data => {
-      alert(data);
-    });
-
-    // this.characterSaved.emit(this.character);
+    let response$: Observable<Character>;
+    if (this.isCreateMode) {
+      response$ = this.characterService.create(this.character);
+    } else {
+      response$ = this.characterService.update(this.character);
+    }
+    response$
+      .pipe(takeUntil(this.destroy))
+      .subscribe(data => {
+        console.log(data);
+        this.router.navigate(['../'], {
+          relativeTo: this.route
+        });
+      });
     this.character = new Character();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy.next(true);
+    this.destroy.complete();
   }
 
 }
