@@ -17,7 +17,13 @@ export class CharacterService {
   }
 
   read(id: number): Observable<Character> {
-    return this.httpClient.get<Character>(`${this.baseUrl}/${id}`);
+    return this.httpClient.get<Character>(`${this.baseUrl}/${id}`)
+      .pipe(
+        map((character: Character) => {
+          character.id = this.getId(character.url);
+          return character;
+        })
+      );
   }
 
   readAll(): Observable<Character[]> {
@@ -33,6 +39,14 @@ export class CharacterService {
           );
         })
       );
+  }
+
+  update(character: Character): Observable<Character> {
+    return this.httpClient.put<Character>(`${this.baseUrl}/${character.id}`, character);
+  }
+
+  create(character: Character): Observable<Character> {
+    return this.httpClient.post<Character>(this.baseUrl, character);
   }
 
   private getId(url: string): number {

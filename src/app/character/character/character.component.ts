@@ -22,6 +22,12 @@ export class CharacterComponent implements OnInit {
   }
 
   save(): void {
+
+    this.characterService.update(this.character)
+    .subscribe(data => {
+      alert(data);
+    });
+
     // this.characterSaved.emit(this.character);
     this.character = new Character();
   }
