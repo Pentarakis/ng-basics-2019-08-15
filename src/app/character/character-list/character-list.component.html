@@ -1,9 +1,3 @@
-<ngb-character
-  [character]="chosenCharacter"
-  (characterSaved)="save($event)"
-
-></ngb-character>
-
 <table mat-table [dataSource]="characters" class="mat-elevation-z8">
 
   <!-- ID -->
@@ -26,6 +20,6 @@
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row *matRowDef="let character; columns: displayedColumns;"
-      (click)="chosenCharacter = character"></tr>
+      (click)="showDetails(character)"></tr>
 
 </table>

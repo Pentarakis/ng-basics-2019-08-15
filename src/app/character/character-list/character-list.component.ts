@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Character } from '../model/character';
 
 @Component({
@@ -17,7 +18,7 @@ export class CharacterListComponent implements OnInit {
 
   displayedColumns: string[] = ['id', 'name', 'culture'];
 
-  constructor() { }
+  constructor(private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit() {
   }
@@ -35,9 +36,15 @@ export class CharacterListComponent implements OnInit {
     this.characters[index] = character;
   }
 
-  private createCharacter(character: Character): void {
-    character.id = this.characters[this.characters.length - 1].id + 1;
-    this.characters.push(character);
+  showDetails(character: Character) {
+    this.router.navigate([`./${character.id}`], {
+      relativeTo: this.route
+    });
   }
 
+  createCharacter(character: Character) {
+    this.router.navigate(['./create'], {
+      relativeTo: this.route
+    });
+  }
 }
