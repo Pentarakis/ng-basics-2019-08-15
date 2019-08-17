@@ -15,6 +15,8 @@ export class CharacterListComponent implements OnInit {
 
   chosenCharacter: Character = new Character();
 
+  displayedColumns: string[] = ['id', 'name', 'culture'];
+
   constructor() { }
 
   ngOnInit() {
