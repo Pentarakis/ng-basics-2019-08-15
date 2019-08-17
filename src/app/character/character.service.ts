@@ -1,4 +1,6 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import { Character } from './model/character';
 
 @Injectable({
@@ -6,21 +8,17 @@ import { Character } from './model/character';
 })
 export class CharacterService {
 
-  characters: Character[] = [
-    { id: 1, name: 'Daenerys Targaryen', culture: 'Valyrian'},
-    { id: 2, name: 'Jon Snow', culture: 'Northmen'}
-  ];
+  readonly baseUrl = 'https://www.anapioficeandfire.com/api/characters';
 
-  constructor() { }
+  // https://www.anapioficeandfire.com/api/characters?pageSize=20
 
-  read(id: number): Character {
-    const result = this.characters.filter(
-      (character: Character) => character.id === id
-    );
-    return result.length > 0 ? result[0] : null;
+  constructor(private httpClient: HttpClient) { }
+
+  read(id: number): Observable<Character> {
+    return this.httpClient.get<Character>(`${this.baseUrl}/${id}`);
   }
 
-  readAll(): Character[] {
-    return this.characters;
+  readAll(): Observable<Character[]> {
+    return this.httpClient.get<Character[]>(`${this.baseUrl}?pageSize=20`);
   }
 }

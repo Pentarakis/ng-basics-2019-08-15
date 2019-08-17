@@ -1,3 +1,4 @@
+import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule, MatFormFieldModule, MatInputModule } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
@@ -18,7 +19,8 @@ import { CharacterModule } from './character/character.module';
     AppRoutingModule,
     BrowserAnimationsModule,
     BasicLayoutModule,
-    CharacterModule
+    CharacterModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

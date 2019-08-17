@@ -21,7 +21,10 @@ export class CharacterListComponent implements OnInit {
     private route: ActivatedRoute,
     private characterService: CharacterService) {
 
-    this.characters = this.characterService.readAll();
+    this.characterService.readAll().subscribe(
+      (characters: Character[]) => {
+        this.characters = characters;
+      });
   }
 
   ngOnInit() {

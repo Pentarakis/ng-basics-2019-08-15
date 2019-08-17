@@ -16,7 +16,9 @@ export class CharacterComponent implements OnInit {
 
   ngOnInit() {
     const id = this.route.snapshot.params.id;
-    this.character = this.characterService.read(Number(id));
+    this.characterService.read(Number(id)).subscribe(
+      (character: Character) => this.character = character
+    );
   }
 
   save(): void {
