@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Observable, Subject, Subscription } from 'rxjs';
 import { filter } from 'rxjs/internal/operators/filter';
@@ -14,17 +15,23 @@ import { Character } from '../model/character';
 export class CharacterComponent implements OnInit, OnDestroy {
 
   isCreateMode = true;
-  character: Character = new Character();
+
+  form: FormGroup;
 
   private destroy = new Subject<boolean>();
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
+    private fb: FormBuilder,
     private characterService: CharacterService) {
   }
 
   ngOnInit() {
+
+    this.initForm();
+    this.form.patchValue({});
+
     this.route.params.pipe(
       pluck('id'),
       filter(id => id !== 'create'),
@@ -33,7 +40,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
     )
       .subscribe(
         (character: Character) => {
-          this.character = character;
+          this.form.reset(character);
           this.isCreateMode = false;
         }
       );
@@ -42,9 +49,9 @@ export class CharacterComponent implements OnInit, OnDestroy {
   save(): void {
     let response$: Observable<Character>;
     if (this.isCreateMode) {
-      response$ = this.characterService.create(this.character);
+      // response$ = this.characterService.create(this.character);
     } else {
-      response$ = this.characterService.update(this.character);
+      // response$ = this.characterService.update(this.character);
     }
     response$
       .pipe(takeUntil(this.destroy))
@@ -60,6 +67,14 @@ export class CharacterComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy.next(true);
     this.destroy.complete();
+  }
+
+  private initForm(): void {
+    this.form = this.fb.group({
+      id: null,
+      name: null,
+      culture: null
+    });
   }
 
 }

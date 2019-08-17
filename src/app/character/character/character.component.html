@@ -4,17 +4,17 @@
 
   <mat-card-content>
 
-    <form *ngIf="character">
+    <form [formGroup]="form">
       <mat-form-field>
         <input type="text" matInput
                name="name" placeholder="name"
-               [(ngModel)]="character.name">
+               fromControlName="name">
       </mat-form-field>
       <br>
       <mat-form-field>
         <input type="text" matInput
                name="culture" placeholder="culture"
-               [(ngModel)]="character.culture">
+               fromControlName="culture">
       </mat-form-field>
 
       <div>
